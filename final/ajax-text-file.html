@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+<body>
+    <button id="button">Get Text File</button>
+    <div id="text"></div>
+
+<script>
+    document.getElementById('button').addEventListener('click', loadText);
+
+    function loadText(){
+        
+        //Create XHR Object
+        let xhr = new XMLHttpRequest();
+
+        //OPEN - call type, url/file , sync/async 
+        xhr.open('GET','lorem.txt',true);
+
+        //SEND
+        xhr.send()
+
+        xhr.onload = function(){
+            if (this.status == 200){
+                document.getElementById('text').innerText = this.responseText;
+            } else if (this.status == 404) {
+                document.getElementById('text').innerText = "File not found";
+            } else if (this.status == 403) {
+                document.getElementById('text').innerText = "Access forbidden";
+            } else {
+                document.getElementById('text').innerText = "Unknown error";    
+            }
+        }
+
+        xhr.onerror = function(){
+            console.log('Loading error');
+        }
+
+        xhr.onprogress = function(){
+            document.getElementById('text').innerText = "Loading data";          
+        }
+    }
+</script>
+
+</body>
+</html>

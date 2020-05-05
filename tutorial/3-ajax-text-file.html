@@ -1,0 +1,150 @@
+<style>
+    img {
+        max-width: 99%;
+        max-height: 99%;    
+    }
+</style>
+
+
+
+<h2>Load file</h2>
+
+
+<p>Let's start with basic setup. A button and placeholder for our text</p>
+
+<pre><code>
+    &lt;!DOCTYPE html&gt;&#13;&#10;    &lt;html lang=&quot;en&quot;&gt;&#13;&#10;    &lt;head&gt;&#13;&#10;        &lt;meta charset=&quot;UTF-8&quot;&gt;&#13;&#10;        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;    &#13;&#10;        &lt;title&gt;Ajax 1 - File input&lt;/title&gt;&#13;&#10;    &lt;/head&gt;&#13;&#10;    &lt;body&gt;&#13;&#10;        &lt;button id=&quot;button&quot;&gt;Get Text File&lt;/button&gt;&#13;&#10;        &lt;div id=&quot;text&quot;&gt;&lt;/div&gt;&#13;&#10;    &lt;/body&gt;&#13;&#10;    &lt;/html&gt;
+</code></pre>
+
+<p>Now let's add event listener to our button to call loadText() function when we click it:</p>
+
+<pre><code>
+    <script>
+        document.getElementById('button').addEventListener('click', loadText);
+    
+        function loadText(){
+            console.log("Clicked");
+        }
+    </script>
+</code></pre>
+
+<p>It's time to do our first AJAX call. BTW we will be using plain JavaScript. At the end I will show you how you can do it using jQuery.</p>
+<p>Firstly we need define new XMLHttpRequest</p>
+
+
+<pre><code>
+    //Create XHR Object
+    let xhr = new XMLHttpRequest();
+</code></pre>
+
+<p>Let's check what XHR is : </p>
+
+<pre><code>
+    console.log(xhr);
+</code></pre>
+
+<p>As you can see it's object with a bunch of functions which we will be using to call server in a background: </p>
+
+<p>Now we will use open() function. It accepts 3 parameters:
+    <ol>
+        <li>Type of request (GET/POST...)</li>
+        <li>URL/file addres</li>
+        <li>Sync/async</li>
+    </ol> 
+
+What does sync/async mean? In a nut shell - synchronous calls are blocking execution until they get response back. Asynchronous calls works opposite.</p>
+
+
+    <pre><code>
+    //OPEN - call type, url/file , sync/async 
+    xhr.open('GET','lorem.txt',true);
+    </code></pre>
+
+    <p>This will asynchronously open our file. Of course, we don't have it yet. So let's create a file called  <i>lorem.txt</i> in the same directory as our index.html file.</p>
+
+
+    <p>And finally let's send our call:</p>
+
+
+    <pre><code>
+    //SEND
+    xhr.send()
+    </code></pre>
+    
+    <p>Let's click our button. As you can see nothing happened in the browser, but when you check Network tab in Developer Tools, you will notice that we have new xhr call visible (make sure to click button first!)</p>
+<img src="assets/lorem.jpg" alt="Lorem">
+
+<p>OK but how to use this loaded file? There are many options but for sake of this tutorial we will use easiest one.</p>
+
+<p>When file is loaded it's going through different states:
+
+    <ol start="0">
+        <li>request not initialized</li>
+        <li>server connection established</li>
+        <li>request received</li>
+        <li>processing request</li>
+        <li>request finished and response is ready</li>
+
+    </ol>
+</p>
+   
+<p>When you load a lot of data entire process may last some time and you can jump on the loading process on each step. I.e. you can display some loading gif when request is being processed.  </p>
+
+<p>If you want to act once file is loaded, you can use onload() function:</p>
+
+
+<pre><code>
+    xhr.onload = function(){
+        console.log(this.responseText);
+    }
+</code></pre>
+
+<p>Of course we never know whether call will be successful so we should always check a status code:</p>
+
+<pre><code>
+    xhr.onload = function(){
+        if (this.status == 200){
+            document.getElementById('text').innerText = this.responseText;
+        } else {
+            document.getElementById('text').innerText = "Error";
+        }
+    }
+</code></pre>
+
+<p>We can be as specific as needed: </p>
+
+
+<pre><code>
+    xhr.onload = function(){
+        if (this.status == 200){
+            document.getElementById('text').innerText = this.responseText;
+        } else if (this.status == 404) {
+            document.getElementById('text').innerText = "File not found";
+        } else if (this.status == 403) {
+            document.getElementById('text').innerText = "Access forbidden";
+        } else {
+            document.getElementById('text').innerText = "Unknown error";    
+        }
+    }
+</code></pre>
+
+
+<p>We can also use dedicated functions: 
+    <ul>
+        <li>xhr.onerror - for handling errors during the request (but other than 4xx/3xx status codes, i.e. cross-origin access etc.) </li>
+        <li>xhr.onprogress - for handling upload process</li>
+    </ul>
+</p>
+
+<p>Example - I filled <i>lorem.txt</i> file with 65 000 paragraphs (about 15MB of text) so you could see onprogress function in action: </p>
+
+<pre><code>
+    &lt;script&gt;&#13;&#10;        document.getElementById(&apos;button&apos;).addEventListener(&apos;click&apos;, loadText);&#13;&#10;    &#13;&#10;        function loadText(){&#13;&#10;            &#13;&#10;            //Create XHR Object&#13;&#10;            let xhr = new XMLHttpRequest();&#13;&#10;    &#13;&#10;            //OPEN - call type, url/file , sync/async &#13;&#10;            xhr.open(&apos;GET&apos;,&apos;lorem.txt&apos;,true);&#13;&#10;    &#13;&#10;            //SEND&#13;&#10;            xhr.send()&#13;&#10;    &#13;&#10;            xhr.onload = function(){&#13;&#10;                if (this.status == 200){&#13;&#10;                    document.getElementById(&apos;text&apos;).innerText = this.responseText;&#13;&#10;                } else if (this.status == 404) {&#13;&#10;                    document.getElementById(&apos;text&apos;).innerText = &quot;File not found&quot;;&#13;&#10;                } else if (this.status == 403) {&#13;&#10;                    document.getElementById(&apos;text&apos;).innerText = &quot;Access forbidden&quot;;&#13;&#10;                } else {&#13;&#10;                    document.getElementById(&apos;text&apos;).innerText = &quot;Unknown error&quot;;    &#13;&#10;                }&#13;&#10;            }&#13;&#10;    &#13;&#10;            xhr.onerror = function(){&#13;&#10;                console.log(&apos;Loading error&apos;);&#13;&#10;            }&#13;&#10;    &#13;&#10;            xhr.onprogress = function(){&#13;&#10;                document.getElementById(&apos;text&apos;).innerText = &quot;Loading data&quot;;          &#13;&#10;            }&#13;&#10;        }&#13;&#10;    &lt;/script&gt;
+</code></pre>
+
+
+<img src="assets/onprogress.gif" alt="OnProgress">
+
+<p>Let's load some <a href="4-ajax-json.html">JSON now</a>.</p>
+
+

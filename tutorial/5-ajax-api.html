@@ -1,0 +1,72 @@
+<style>
+    img {
+        max-width: 99%;
+        max-height: 99%;    
+    }
+</style>
+
+
+<h1>AJAX API</h1>
+
+<p>An API, stands for Application Programming Interface and basically its something that allows one piece of software to another.</p>
+
+<p>There are many kinds of APIs, but the one which you will deal most often is REST API where REST stands for REpresentational State Transfer. We don't have to bother with this for now.</p>
+
+<p>I like to think of API using ships, docks and harbour. In order to use api we need to have as server (a harbour) which we can call. </p>
+
+<p>Each call (ship) cary some stuff (data) to a harbour and get some data back. Sometimes it can carry very little data on the way to harbour (request) and bring lot of data back (response), and sometimes it can be oposite.</p>
+
+<p>In order to make a proper call we have to specify a proper endpoint (dock in the harbour), otherwise our ship won't receive any data back.</p>
+
+
+<p>Let's check the example:</p>
+
+<h2>Weather forecast</h2>
+
+<p>Let's imagine that we want to show our users a weather forecast. We will make use of free API available at <a href="openweathermap.org">openweathermap.org</a> </p>
+
+<p><b>Note!</b> In order to use free API you have to register first, and get your API key from <a href="https://home.openweathermap.org/api_keys">here</a>. Free account allows us to call up 60x times per minute.</p>
+
+<p>Now when we have API Key ready we can use one of the endpoint <a href="https://openweathermap.org/api"> available to use</a></p>
+
+<p>I am gonna use Current Weather data, according to docs I have to use the following endpoint: </p>
+
+<pre><code>
+    api.openweathermap.org/data/2.5/weather?q={city name}&appid={your api key}
+</code></pre>
+
+
+<p>As you can see it contains some parameters, which we have to pass. Let's fill it with data: </p>
+
+
+<pre><code>
+    api.openweathermap.org/data/2.5/weather?q=London&appid=ABC123
+</code></pre>
+
+<p><b>NOTE!</b> You have to replace ABC123 key with yours, otherwise it won't work.</p>
+
+<p>Now when we have endpoint ready, let's make a call: </p>
+
+
+<pre><code>
+    //OPEN - call type, url/file , sync/async 
+    xhr.open('GET','http://api.openweathermap.org/data/2.5/weather?q=London&appid=ABC123',true);
+
+</code></pre>
+
+<img src="assets/weather.gif" alt="Weather foreacst">
+
+<p>Voila! You made your first call to API. As you can see we are getting temperature in imperial units, what if we want to change it to metric? </p>
+
+<p>We can simply add new parameter to our call: <i>&units=metric</i></p>
+
+<pre><code>
+    api.openweathermap.org/data/2.5/weather?q=London&appid=ABC123&units=metric
+
+</code></pre>
+
+<p>You probably already noticed that while using GET request we are specifying parameters after URL using question mark sign (?), in a key=value syntax, and use & sign to split parameters.</p>
+
+<p>Finally, let's have a look on how we can make API calls <a href="6-ajax-jquery.html">using jQuery</a>.</p>
+
+

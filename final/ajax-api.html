@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ajax 2 - JSON</title>
+</head>
+<body>
+    <button id="button">Get Current Weather</button>
+    <div id="text"></div>
+
+<script>
+    document.getElementById('button').addEventListener('click', loadJSON);
+
+    function loadJSON(){
+        
+        //Create XHR Object
+        let xhr = new XMLHttpRequest();
+
+        //OPEN - call type, url/file , sync/async 
+        // replace ABC123 with your API key from openweathermap.org
+        xhr.open('GET','http://api.openweathermap.org/data/2.5/weather?q=London&appid=ABC123&&units=metric',true);
+
+        //SEND
+        xhr.send()
+
+        xhr.onload = function(){
+            if (this.status == 200){
+                let data = JSON.parse(this.response);
+               console.log(data);
+            } else {
+                console.log("Ooops something went wrong! Check network tab for more details.")            }
+        }
+    }
+</script>
+
+</body>
+</html>

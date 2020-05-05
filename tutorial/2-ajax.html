@@ -1,0 +1,190 @@
+<style>
+    img {
+        max-width: 99%;
+        max-height: 99%;    
+    }
+</style>
+
+
+<h2>What we will learn during ths tutorial?</h2>
+
+<ol>
+  <li>What AJAX, HTTP, XML and JSON are</li>
+  <li>Read files using AJAX</li>
+  <li>Read JSON using AJAX</li>
+  <li>Call REST API using AJAX</li>
+  <li>Use AJAX in jQuery</li>
+</ol>
+
+
+<h1>What is AJAX?</h1>
+
+<p>AJAX stands for <i>Asynchronous JavaScript and XML</i>. It's not a programming language, it's not a library so what it actually is? </p>
+
+<p>AJAX, while not a technology itself is often described as a "new" approach to using a number of existing technologies together including:
+  
+<ul>
+  <li>HTML or XHTML</li>
+  <li>JavaScript</li>
+  <li>DOM</li>
+  <li>XML/JSON</li>
+  <li>XSLT</li>
+  <li>XMLHttpRequest</li>
+</ul></p>
+
+
+<h3>OK but what it actually does?</h3>
+
+<p>AJAX allows us to: 
+  
+  <ul>
+    <li>Read data from a web server - after a web page has loaded</li>
+    <li>Update a web page without reloading the page</li>
+    <li>Send data to a web server - in the background</li>
+  </ul>
+</p>
+
+
+<h2>JSON vs XML</h2>
+
+<p>Although AJAX has XML is in the name, when it comes to WebDevelopment it has almost entirely been replaced with JSON or plain text. Why?  </p>
+  
+<p>XML was very important to the history of the modern web development. That's why AJAX name sticks (instead of AJAJ). That's also explain why we will be using XMLHttpRequest methods.</p>
+
+<p>Both XML and JSON are designed to store data. However they have many differences: </p>
+  
+  
+  <p> XML is a very powerful markup language which allows to create complex data structures and has some distinctive fetaures like:
+    
+  <ul>
+    <li>XML support various data types such as number, text, images, charts, graphs, etc.</li>
+    <li>It supports various encoding</li>
+    <li>It supports comments</li>
+    <li>It supports namespaces</li>
+    <li>It's more secure than JSON</li>
+  </ul></p>
+
+
+  <p>JSON (JavaScript Object Notation) is used to store information in an organized, and easy-to-access manner.  Since it's tightly related to JavaScript (JSON is recognized natively by JavaScript) it become a standard for Web Development. It also has many features:
+    
+  <ul>
+    <li>It's very easy to use. </li>
+    <li>It's very fast - consumes memory </li>
+    <li>It's widely adopted in different languages (both front and backend), libraries and browsers. </li>
+    <li>Easy to read and write</li>
+
+
+  </ul></p>
+
+<h2>How does it work? </h2>
+
+<p>AJAX allows use to call our backend services using  JavaScript (more precisely: <i>XMLHttpRequest</i>) without reloading page:</p>
+
+
+<img src="assets/ajax.jpg" alt="">
+
+<p>The easiest way to understand that this is to run example. We will see that very soon on real example. </p>
+
+
+
+
+
+  <h1>HTTP Methods </h1>
+
+  <p>Whenever we open any page, our we browsers is sending request to the server, and in the response receive a source code of our page which can be parsed and displayed to us by a web browser. </p>
+  
+  <p>All of this happens thanks to HTTP (Hypertext Transfer Protocol) which is used to sends data between our browser and server.</p>
+  
+  <p>There are few HTTP Methods available: 
+  
+      <ul>
+          <li>GET</li>
+          <li>POST</li>
+          <li>PUT</li>
+          <li>HEAD</li>
+          <li>DELETE</li>
+          <li>PATCH</li>
+          <li>OPTIONS</li>
+      </ul>
+  </p>
+  
+  <p>The most two common HTTP methods are GET and POST, and we will focus on them today.</p>
+  
+  
+  <h2>Live server</h2>
+  
+  <p>We will need some server to run our examples. You can use more advanced ones like XAMP, but for the sake of this tutorial we will use a tiny Live Server available as an extension to Visual Studio Code.</p>
+  
+  <p>To install it go to Extensions (Ctrl + Shift + X), search for Live server, and install it:</p>
+  
+  <img src="assets/live-server.gif" alt="Live server">
+  
+  
+  <p>Now in order to start our server in one of 3 ways:
+      
+      <ol>
+          <li>Use Go Live icon in a bottom status bar:</li>
+          <img src="assets/vscode-live-server-statusbar-3.jpg" alt="Live server icon">
+          <li>Right click on a HTML file from Explorer Window and click on Open with Live Server.</li>
+          <img src="assets/vscode-live-server-explorer-menu-demo-1.gif" alt="Live server menu demo">
+          <li>Open a HTML file and right-click on the editor and click on Open with Live Server.</li>
+          <img src="assets/vscode-live-server-editor-menu-3.jpg" alt="Live server editor">
+      </ol>
+      
+  This will open our website in a browser. Note that since now, every time we change our file it will auto refresh our preview in a browser:
+  
+  <img src="assets/live-server-run.gif" alt="Live server run autorefresh">
+  <p><b>Note!</b>Also the URL of our website has changed:
+  </p>
+  
+  </p>
+  
+  <h2>Initial GET</h2>
+  
+  
+  <p>Let's create a new basic HTML file.</p>
+  
+  <p>In order to do that you can use Emmet shortcut. Crate empty index.html file, type <i>!</i> and press <kbd>TAB</kbd> key:</p>
+  
+  <img src="assets/emmet.gif" alt="">
+  
+  <p>Now open our page using live server and check it inspector.</p>
+  
+  <img src="assets/index-200.jpg" alt="Initial 200 code">
+  
+  
+  <p>As you can see when we load a page, our browser is sending GET request. It received status 200 (we will learn more about status soon) and received a response.</p>
+  
+  
+  <p><b>Note:</b> You can see more requests in the view - that might be caused by some browser extensions. In order to minimize impact you can open you page in a incognito mode.</p>
+  
+  <p>When we add some stylesheets:</p>
+  
+  
+  <pre><code>
+      &lt;link href=&quot;https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/css/mdb.min.css&quot; rel=&quot;stylesheet&quot;&gt;&#13;&#10;</code></pre>
+  
+  
+   <p>And check console again, we will also notice that it was loaded using GET:</p>
+  
+  
+  <img src="assets/css.jpg" alt="Loading CSS">
+  
+  <p>As you noticed it also got status 200. You may also noticed that our index.html changed status from 200 to 304 (Not modified). Why? This is because it was cached. When we visit page for the second time we do not have to load it all over again. Browser will check whether something has changed (got updated) and if not - it will serve cached version.</p>
+  
+  <p> If we broke our css address:  </p>
+  
+  <pre><code>
+      &lt;link href=&quot;https://mdbootstrap.com/mdb.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+  </code></pre>
+  
+  <p>We will get another, well known 404 error :) </p>
+  
+  <img src="assets/404.jpg" alt="404 error">
+  
+  
+  <p>Almost (but not entire!) traffic in web development goes through HTTP calls, therefore it is important for us to get a proper understanding of them. We will learn more advanced calls and status in a future, for now we have enough basics to continue.</p>
+  
+
+
+  <p>Let's start writing <a href="3-ajax-text-file.html">some ajax calls</a></p>

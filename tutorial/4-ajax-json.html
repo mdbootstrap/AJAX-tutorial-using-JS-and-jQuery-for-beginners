@@ -1,0 +1,170 @@
+<style>
+    img {
+        max-width: 99%;
+        max-height: 99%;    
+    }
+</style>
+
+<h2>JSON</h2>
+
+<p>As you already know JSON is meant to store our data data. JSON is so important that it has it's own tutorial so you could master it but for now let's just remind some basics for those who are not familiar with it: </p>
+
+
+
+
+
+<p>Anything which is valid JSON is also valid JavaScript.</p>
+
+<p>JSON Types:</p>
+
+
+<ul>
+    <li>Strings ("Hello World" , "Dave")</li>
+    <li>Number (10 1.5 -40)</li>
+    <li>Booleans (true false)</li>
+    <li>null (null)</li>
+    <li>Arrays ([1,2,3,] , ["Hello","World"]</li>
+    <li>Objects ({"key": "value"}, {"name": "David"} {"age": 30}</li>
+</ul>
+
+
+<p>Lets' create some JSON file:</p>
+
+<pre><code>
+    {
+        "name": "Dawid",
+        "favourieColor": "blue",
+        "isProgrammer": true,
+        "languages": ["JavaScript", "Python", "Java"],
+        "friends": [{
+            "name": "Peter",
+            "favourieColor": "green",
+            "isProgrammer": false,
+            "friends": [""]
+       }]
+    }
+</code></pre>
+
+
+<p>Since valid JSON is also a valid JS code we can directly use it within our code:</p>
+
+
+<pre><code>
+    &lt;script&gt;&#13;&#10;        let person = [{&#13;&#10;            &quot;name&quot;: &quot;Dawid&quot;,&#13;&#10;            &quot;favourieColor&quot;: &quot;blue&quot;,&#13;&#10;            &quot;isProgrammer&quot;: true,&#13;&#10;            &quot;languages&quot;: [&quot;JavaScript&quot;, &quot;Python&quot;, &quot;Java&quot;],&#13;&#10;            &quot;friends&quot;: [{&#13;&#10;                &quot;name&quot;: &quot;Peter&quot;,&#13;&#10;                &quot;favourieColor&quot;: &quot;green&quot;,&#13;&#10;                &quot;isProgrammer&quot;: false,&#13;&#10;                &quot;friends&quot;: [&quot;&quot;]&#13;&#10;            }]&#13;&#10;        }]&#13;&#10;&#13;&#10;        console.log(person);&#13;&#10;    &lt;/script&gt;
+</code></pre>
+
+
+<p>As you can se we can easily browse it in our browser using developer tools:</p>
+
+<img src="assets/person-json.gif" alt="person-json">
+
+
+<p>You can also see that we can easily create complex, nested objects.</p>
+
+
+<h2>Getting JSON data via AJAX </h2>
+
+
+<p>Let's create another json file containing data about our users and save it as <i>users.json</i> file: </p>
+
+
+
+<pre><code>
+    [{
+        "id": 1,
+        "first_name": "Jeanette",
+        "last_name": "Penddreth",
+        "email": "jpenddreth0@census.gov",
+        "gender": "Female",
+        "ip_address": "26.58.193.2"
+      }, {
+        "id": 2,
+        "first_name": "Giavani",
+        "last_name": "Frediani",
+        "email": "gfrediani1@senate.gov",
+        "gender": "Male",
+        "ip_address": "229.179.4.212"
+      }, {
+        "id": 3,
+        "first_name": "Noell",
+        "last_name": "Bea",
+        "email": "nbea2@imageshack.us",
+        "gender": "Female",
+        "ip_address": "180.66.162.255"
+      }, {
+        "id": 4,
+        "first_name": "Willard",
+        "last_name": "Valek",
+        "email": "wvalek3@vk.com",
+        "gender": "Male",
+        "ip_address": "67.76.188.26"
+      }]
+</code></pre>
+
+
+<p>Now let's make a call to our file like we did in the previous examples:</p>
+
+
+<pre><code>
+    &lt;body&gt;&#13;&#10;        &lt;button id=&quot;button&quot;&gt;Get Text File&lt;/button&gt;&#13;&#10;        &lt;div id=&quot;text&quot;&gt;&lt;/div&gt;&#13;&#10;    &#13;&#10;    &lt;script&gt;&#13;&#10;        document.getElementById(&apos;button&apos;).addEventListener(&apos;click&apos;, loadJSON);&#13;&#10;    &#13;&#10;        function loadJSON(){&#13;&#10;            &#13;&#10;            //Create XHR Object&#13;&#10;            let xhr = new XMLHttpRequest();&#13;&#10;    &#13;&#10;            //OPEN - call type, url/file , sync/async &#13;&#10;            xhr.open(&apos;GET&apos;,&apos;users.json&apos;,true);&#13;&#10;    &#13;&#10;            //SEND&#13;&#10;            xhr.send()&#13;&#10;    &#13;&#10;            xhr.onload = function(){&#13;&#10;                if (this.status == 200){&#13;&#10;                   console.log(this.response)&#13;&#10;                } else {&#13;&#10;                    console.log(&quot;Ooops something went wrong! Check network tab for more details.&quot;)            }&#13;&#10;            }&#13;&#10;        }&#13;&#10;    &lt;/script&gt;&#13;&#10;    &#13;&#10;    &lt;/body&gt;
+</code></pre>
+
+<img src="assets/users-json.gif" alt="users json">
+
+
+<p>Great! Now we have to parse our JSON so we could access data we need:</p>
+
+<pre><code>
+    xhr.onload = function(){
+        if (this.status == 200){
+            let data = JSON.parse(this.response);
+            console.log(data);
+        } else {
+            console.log("Ooops something went wrong! Check network tab for more details.")            }
+    }
+</code></pre>
+
+
+<p>If you check console now you wil note that now we can easily navigate through our data. </p>
+
+<img src="assets/parse-json.gif" alt="parse json">
+
+<p>Let's now parse our JSON and add it to our page dynamically.</p>
+
+
+<p>Create function renderHTML():</p>
+
+
+<pre><code>
+    function renderHTML(data){
+        let htmlString = '<ol>';
+
+        for (i=0; i < data.length; i++){
+            htmlString += "<li>" + data[i].first_name + " " + data[i].last_name + " is a " + data[i].gender + ". Last connected from IP: " + data[i].ip_address;
+        }
+        htmlString += "</ol>";
+        document.getElementById('text').innerHTML = htmlString;
+    }
+</code></pre>
+
+<p>And call it onload</p>
+
+<pre><code>
+    if (this.status == 200){
+        let data = JSON.parse(this.response);
+        renderHTML(data);
+    }
+</code></pre>
+
+
+
+
+<p>Now you know how to use AJAX to load and parse JSON so owe are ready to <a href="5-ajax-api.html">call a real API</a>.</p>
+
+
+
+
+
+
+
+

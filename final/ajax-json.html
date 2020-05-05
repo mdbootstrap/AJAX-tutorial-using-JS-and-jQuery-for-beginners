@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ajax 2 - JSON</title>
+</head>
+<body>
+    <button id="button">Get Text File</button>
+    <div id="text"></div>
+
+<script>
+    document.getElementById('button').addEventListener('click', loadJSON);
+
+    function loadJSON(){
+        
+        //Create XHR Object
+        let xhr = new XMLHttpRequest();
+
+        //OPEN - call type, url/file , sync/async 
+        xhr.open('GET','users.json',true);
+
+        //SEND
+        xhr.send()
+
+        xhr.onload = function(){
+            if (this.status == 200){
+                let data = JSON.parse(this.response);
+                renderHTML(data);
+            } else {
+                console.log("Ooops something went wrong! Check network tab for more details.")            }
+        }
+
+        function renderHTML(data){
+            let htmlString = '<ol>';
+
+            for (i=0; i < data.length; i++){
+                htmlString += "<li>" + data[i].first_name + " " + data[i].last_name + " is a " + data[i].gender + ". Last connected from IP: " + data[i].ip_address;
+            }
+            htmlString += "</ol>";
+            document.getElementById('text').innerHTML = htmlString;
+        }
+    }
+</script>
+
+</body>
+</html>
